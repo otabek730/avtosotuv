@@ -1,0 +1,2186 @@
+<!doctype html>
+<html lang="uz" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AvtoBozor — Mashinalar savdosi</title>
+    <style>
+      /* ============ RANGLAR (CSS o'zgaruvchilari) ============ */
+      :root {
+        --bg: #f4f6fb;
+        --surface: #ffffff;
+        --surface-2: #eef1f8;
+        --text: #16192c;
+        --muted: #64708a;
+        --primary: #2f6bff;
+        --primary-2: #6a3dff;
+        --accent: #ff7a1a;
+        --border: #dde2ee;
+        --shadow: 0 6px 24px rgba(30, 45, 90, 0.1);
+        --shadow-lg: 0 18px 44px rgba(30, 45, 90, 0.22);
+        --danger: #e5384f;
+        --success: #18a864;
+        --hero-overlay: linear-gradient(
+          120deg,
+          rgba(15, 25, 70, 0.82),
+          rgba(60, 30, 150, 0.55)
+        );
+      }
+      [data-theme="dark"] {
+        --bg: #0c0f1a;
+        --surface: #161b2d;
+        --surface-2: #1e2540;
+        --text: #e9ecf7;
+        --muted: #97a1bd;
+        --primary: #5b8cff;
+        --primary-2: #8a63ff;
+        --accent: #ffa24d;
+        --border: #2a3250;
+        --shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+        --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.65);
+        --hero-overlay: linear-gradient(
+          120deg,
+          rgba(5, 8, 25, 0.88),
+          rgba(40, 20, 110, 0.6)
+        );
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          Roboto,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+        transition:
+          background 0.35s,
+          color 0.35s;
+      }
+      body,
+      .card,
+      .modal,
+      header,
+      input,
+      select,
+      textarea,
+      .filters,
+      .stat,
+      footer {
+        transition:
+          background 0.35s,
+          color 0.35s,
+          border-color 0.35s,
+          box-shadow 0.25s,
+          transform 0.25s;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+      }
+      .container {
+        width: min(1200px, 92%);
+        margin: 0 auto;
+      }
+
+      /* ============ TUGMALAR ============ */
+      .btn {
+        padding: 10px 18px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition:
+          transform 0.15s,
+          box-shadow 0.2s,
+          opacity 0.2s;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(47, 107, 255, 0.35);
+      }
+      .btn-outline {
+        background: transparent;
+        border: 1.5px solid var(--border);
+        color: var(--text);
+      }
+      .btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .btn-accent {
+        background: var(--accent);
+        color: #fff;
+      }
+      .btn-block {
+        width: 100%;
+      }
+
+      /* ============ NAVBAR ============ */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        box-shadow: var(--shadow);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 68px;
+        gap: 12px;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .logo span {
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .nav-links {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+      }
+      .nav-links a {
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: var(--surface-2);
+        color: var(--primary);
+      }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .icon-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--surface-2);
+        font-size: 1.15rem;
+        color: var(--text);
+        position: relative;
+      }
+      .icon-btn:hover {
+        transform: rotate(15deg) scale(1.08);
+      }
+      .badge {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        background: var(--danger);
+        color: #fff;
+        font-size: 0.68rem;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+      }
+      .user-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+      }
+      .user-box .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hamburger {
+        display: none;
+      }
+      @media (max-width: 900px) {
+        .hamburger {
+          display: inline-block;
+        }
+        .nav-links {
+          position: absolute;
+          top: 68px;
+          left: 0;
+          right: 0;
+          background: var(--surface);
+          flex-direction: column;
+          padding: 12px;
+          border-bottom: 1px solid var(--border);
+          display: none;
+          align-items: stretch;
+        }
+        .nav-links.open {
+          display: flex;
+        }
+        .user-name {
+          display: none;
+        }
+      }
+
+      /* ============ HERO ============ */
+      .hero {
+        position: relative;
+        min-height: 560px;
+        display: flex;
+        align-items: center;
+        color: #fff;
+        background:
+          var(--hero-overlay),
+          url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=70")
+            center/cover,
+          linear-gradient(135deg, #1b2a6b, #4a2bb5);
+      }
+      .hero-content {
+        padding: 70px 0;
+        max-width: 820px;
+        animation: fadeUp 0.8s ease both;
+      }
+      .hero h1 {
+        font-size: clamp(2rem, 5vw, 3.6rem);
+        line-height: 1.12;
+        margin-bottom: 14px;
+      }
+      .hero h1 em {
+        font-style: normal;
+        color: var(--accent);
+      }
+      .hero p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 28px;
+        max-width: 600px;
+      }
+      .search-box {
+        display: flex;
+        gap: 8px;
+        background: var(--surface);
+        padding: 8px;
+        border-radius: 14px;
+        box-shadow: var(--shadow-lg);
+        flex-wrap: wrap;
+      }
+      .search-box input {
+        flex: 1 1 220px;
+        border: none;
+        background: transparent;
+        color: var(--text);
+        font-size: 1rem;
+        padding: 12px 14px;
+        outline: none;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          ptransform: translateY(30x);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* ============ BO'LIMLAR ============ */
+      section {
+        padding: 60px 0;
+      }
+      .section-title {
+        font-size: 1.9rem;
+        margin-bottom: 6px;
+      }
+      .section-sub {
+        color: var(--muted);
+        margin-bottom: 26px;
+      }
+
+      /* ============ FILTR ============ */
+      .filters {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .field label {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1.5px solid var(--border);
+        background: var(--surface-2);
+        color: var(--text);
+        font: inherit;
+        outline: none;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(47, 107, 255, 0.18);
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .toolbar .count {
+        color: var(--muted);
+      }
+      .toolbar .right {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .toolbar select {
+        width: auto;
+      }
+      .chip {
+        padding: 9px 14px;
+        border-radius: 20px;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        color: var(--text);
+        font-weight: 600;
+      }
+      .chip.active {
+        background: var(--danger);
+        border-color: var(--danger);
+        color: #fff;
+      }
+
+      /* ============ KARTOCHKALAR ============ */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+        gap: 22px;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        animation: fadeUp 0.5s ease both;
+      }
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+      }
+      .card-img {
+        position: relative;
+        aspect-ratio: 16/10;
+        overflow: hidden;
+        background: var(--surface-2);
+      }
+      .card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+      }
+      .card:hover .card-img img {
+        transform: scale(1.07);
+      }
+      .tag {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 20px;
+      }
+      .fav {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.92);
+        font-size: 1.15rem;
+        color: #555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+      }
+      .fav:hover {
+        transform: scale(1.15);
+      }
+      .fav.on {
+        color: var(--danger);
+      }
+      .card-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex: 1;
+      }
+      .card-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+      .specs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px 10px;
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+      .price {
+        font-size: 1.65rem;
+        font-weight: 800;
+        color: var(--primary);
+        margin-top: auto;
+      }
+      .card-actions {
+        display: flex;
+        gap: 8px;
+      }
+      .card-actions .btn {
+        flex: 1;
+        padding: 9px 10px;
+      }
+      .empty {
+        text-align: center;
+        padding: 60px 10px;
+        color: var(--muted);
+        font-size: 1.2rem;
+        grid-column: 1/-1;
+      }
+      .empty b {
+        display: block;
+        font-size: 3rem;
+      }
+
+      /* ============ BIZ HAQIMIZDA ============ */
+      .about {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 32px;
+        align-items: center;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 22px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .stat b {
+        font-size: 2.1rem;
+        color: var(--primary);
+        display: block;
+      }
+      .stat span {
+        color: var(--muted);
+      }
+      @media (max-width: 800px) {
+        .about {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ============ FOOTER ============ */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        padding: 44px 0 20px;
+      }
+      .foot-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 26px;
+      }
+      footer h4 {
+        margin-bottom: 10px;
+      }
+      footer li {
+        list-style: none;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .socials {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .socials a {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--surface-2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+      .socials a:hover {
+        background: var(--primary);
+        color: #fff;
+        transform: translateY(-3px);
+      }
+      .copy {
+        text-align: center;
+        color: var(--muted);
+        margin-top: 28px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        font-size: 0.9rem;
+      }
+
+      /* ============ MODAL ============ */
+      .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 8, 20, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        overflow-y: auto;
+      }
+      .backdrop.open {
+        display: flex;
+        animation: fade 0.25s;
+      }
+      .modal {
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 20px;
+        width: min(560px, 100%);
+        max-height: 94vh;
+        overflow-y: auto;
+        padding: 26px;
+        position: relative;
+        box-shadow: var(--shadow-lg);
+        animation: pop 0.3s ease;
+      }
+      .modal.wide {
+        width: min(780px, 100%);
+      }
+      .modal h3 {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+      }
+      .modal .sub {
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+      .close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--surface-2);
+        color: var(--text);
+        font-size: 1.2rem;
+      }
+      .close:hover {
+        background: var(--danger);
+        color: #fff;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: scale(0.92) translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .form-grid .full {
+        grid-column: 1/-1;
+      }
+      @media (max-width: 560px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .field.err input,
+      .field.err select,
+      .field.err textarea {
+        border-color: var(--danger);
+        background: rgba(229, 56, 79, 0.08);
+      }
+      .msg {
+        display: none;
+        color: var(--danger);
+        font-size: 0.78rem;
+        margin-top: 3px;
+      }
+      .field.err .msg {
+        display: block;
+      }
+      .tabs {
+        display: flex;
+        background: var(--surface-2);
+        border-radius: 12px;
+        padding: 4px;
+        margin: 14px 0 18px;
+      }
+      .tabs button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .tabs button.active {
+        background: var(--surface);
+        color: var(--primary);
+        box-shadow: var(--shadow);
+      }
+      .pw-wrap {
+        position: relative;
+      }
+      .pw-wrap button {
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 6px;
+      }
+      .check {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        font-size: 0.9rem;
+      }
+      .check input {
+        width: auto;
+        margin-top: 4px;
+      }
+      .detail-img {
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 14px;
+        aspect-ratio: 16/9;
+        background: var(--surface-2);
+      }
+      .detail-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .detail-table {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 18px;
+        margin: 12px 0;
+      }
+      .detail-table div {
+        padding: 8px 12px;
+        background: var(--surface-2);
+        border-radius: 10px;
+        font-size: 0.92rem;
+      }
+      .detail-table small {
+        display: block;
+        color: var(--muted);
+        font-size: 0.74rem;
+      }
+      .summary {
+        background: var(--surface-2);
+        border-radius: 12px;
+        padding: 12px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+      .summary img {
+        width: 92px;
+        height: 62px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .success {
+        text-align: center;
+        padding: 20px 0;
+      }
+      .success .ok {
+        font-size: 3.4rem;
+      }
+      .preview {
+        margin-top: 8px;
+        max-height: 130px;
+        border-radius: 10px;
+        display: none;
+      }
+
+      /* ============ TOAST ============ */
+      #toasts {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 300;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+      }
+      .toast {
+        background: #1f2540;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 12px;
+        box-shadow: var(--shadow-lg);
+        animation: fadeUp 0.3s;
+        border-left: 4px solid var(--primary);
+      }
+      .toast.ok {
+        border-color: var(--success);
+      }
+      .toast.bad {
+        border-color: var(--danger);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ NAVIGATSIYA ============ -->
+    <header>
+      <div class="container nav">
+        <a href="#home" class="logo">🚗 <span>AvtoBozor</span></a>
+        <nav class="nav-links" id="navLinks">
+          <a href="#home" class="active">Bosh sahifa</a>
+          <a href="#cars">Mashinalar</a>
+          <a href="#" id="navSell">Sotish</a>
+          <a href="#cars" id="navBuy">Sotib olish</a>
+          <a href="#about">Biz haqimizda</a>
+        </nav>
+        <div class="nav-right">
+          <button class="icon-btn" id="favBtn" title="Sevimlilar">
+            ❤️<span class="badge" id="favCount">0</span>
+          </button>
+          <button class="icon-btn" id="themeBtn" title="Rejimni almashtirish">
+            🌙
+          </button>
+          <div id="authArea"></div>
+          <button class="icon-btn hamburger" id="burger">☰</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <div class="hero" id="home">
+      <div class="container hero-content">
+        <h1>Orzuingizdagi <em>mashinani</em> toping yoki tez soting</h1>
+        <p>
+          O'zbekistonning har bir viloyatidan minglab e'lonlar. Ishonchli, qulay
+          va tezkor avtobozor.
+        </p>
+        <div class="search-box">
+          <input
+            type="text"
+            id="heroSearch"
+            placeholder="Masalan: Gentra, Kia K5, Camry..."
+          />
+          <button class="btn btn-primary" id="heroSearchBtn">
+            🔍 Qidirish
+          </button>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-accent" id="heroSell">
+            ➕ Mashinani sotish
+          </button>
+          <a
+            href="#cars"
+            class="btn btn-outline"
+            style="color: #fff; border-color: rgba(255, 255, 255, 0.6)"
+            >Mashinalarni ko'rish</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ KATALOG ============ -->
+    <section id="cars">
+      <div class="container">
+        <h2 class="section-title">Mashinalar katalogi</h2>
+        <p class="section-sub">
+          Filtr va saralash yordamida o'zingizga mosini toping
+        </p>
+
+        <div class="filters">
+          <div class="field">
+            <label>Qidiruv</label
+            ><input type="text" id="fSearch" placeholder="Nomi bo'yicha..." />
+          </div>
+          <div class="field">
+            <label>Marka</label
+            ><select id="fBrand">
+              <option value="">Barchasi</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Narx dan ($)</label
+            ><input type="number" id="fMin" min="0" placeholder="0" />
+          </div>
+          <div class="field">
+            <label>Narx gacha ($)</label
+            ><input type="number" id="fMax" min="0" placeholder="100 000" />
+          </div>
+          <div class="field">
+            <label>Yil (dan)</label
+            ><select id="fYear">
+              <option value="">Barchasi</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Yoqilg'i</label>
+            <select id="fFuel">
+              <option value="">Barchasi</option>
+              <option>Benzin</option>
+              <option>Gaz/Benzin</option>
+              <option>Dizel</option>
+              <option>Gibrid</option>
+              <option>Elektr</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Uzatmalar qutisi</label>
+            <select id="fGear">
+              <option value="">Barchasi</option>
+              <option>Avtomat</option>
+              <option>Mexanika</option>
+            </select>
+          </div>
+          <div class="field" style="display: flex; align-items: flex-end">
+            <button class="btn btn-outline btn-block" id="fReset">
+              ♻️ Tozalash
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <div class="count" id="resCount"></div>
+          <div class="right">
+            <button class="chip" id="onlyFav">❤️ Faqat sevimlilar</button>
+            <select id="fSort">
+              <option value="new">Yangi e'lonlar</option>
+              <option value="priceAsc">Narx: arzondan qimmatga</option>
+              <option value="priceDesc">Narx: qimmatdan arzonga</option>
+              <option value="yearDesc">Yil: yangidan eskiga</option>
+              <option value="yearAsc">Yil: eskidan yangiga</option>
+            </select>
+            <button class="btn btn-primary" id="sellBtn2">
+              ➕ Mashinani sotish
+            </button>
+          </div>
+        </div>
+
+        <div class="grid" id="grid"></div>
+      </div>
+    </section>
+
+    <!-- ============ BIZ HAQIMIZDA ============ -->
+    <section id="about" style="background: var(--surface-2)">
+      <div class="container about">
+        <div>
+          <h2 class="section-title">Biz haqimizda</h2>
+          <p class="section-sub">
+            AvtoBozor — ishonchli avtomobil savdosi platformasi
+          </p>
+          <p>
+            Biz sotuvchi va xaridorni bir joyda to'playmiz. E'lon joylash bir
+            necha daqiqa oladi, mashinani topish esa qulay filtrlar yordamida
+            juda oson. Har bir e'lon aniq ma'lumotlar, real narx va sotuvchi
+            bilan to'g'ridan-to'g'ri aloqa bilan taqdim etiladi.
+          </p>
+        </div>
+        <div class="stats">
+          <div class="stat"><b data-to="1000">0</b><span>+ mashina</span></div>
+          <div class="stat"><b data-to="500">0</b><span>+ mijoz</span></div>
+          <div class="stat">
+            <b data-to="14">0</b><span>viloyat va shahar</span>
+          </div>
+          <div class="stat"><b data-to="24">0</b><span>/7 yordam</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer>
+      <div class="container">
+        <div class="foot-grid">
+          <div>
+            <div class="logo">🚗 <span>AvtoBozor</span></div>
+            <p style="color: var(--muted); margin-top: 8px">
+              Mashinalarni oson sotib oling va soting.
+            </p>
+            <div class="socials">
+              <a href="#" title="Telegram">T</a
+              ><a href="#" title="Instagram">I</a
+              ><a href="#" title="Facebook">F</a
+              ><a href="#" title="YouTube">Y</a>
+            </div>
+          </div>
+          <div>
+            <h4>Aloqa</h4>
+            <ul>
+              <li>📍 Toshkent sh., Amir Temur ko'chasi 1</li>
+              <li>📞 +998 90 123 45 67</li>
+              <li>✉️ info@avtobozor.uz</li>
+            </ul>
+          </div>
+          <div>
+            <h4>Ish vaqti</h4>
+            <ul>
+              <li>Du–Ju: 09:00 – 19:00</li>
+              <li>Sha: 10:00 – 16:00</li>
+              <li>Yak: dam olish</li>
+            </ul>
+          </div>
+        </div>
+        <div class="copy">
+          © <span id="year"></span> AvtoBozor. Barcha huquqlar himoyalangan.
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============ MODAL: BATAFSIL ============ -->
+    <div class="backdrop" id="mDetail">
+      <div class="modal wide">
+        <button class="close" data-close>✕</button>
+        <div id="detailBody"></div>
+      </div>
+    </div>
+
+    <!-- ============ MODAL: SOTIB OLISH ============ -->
+    <div class="backdrop" id="mBuy">
+      <div class="modal">
+        <button class="close" data-close>✕</button>
+        <div id="buyBody"></div>
+      </div>
+    </div>
+
+    <!-- ============ MODAL: SOTISH ============ -->
+    <div class="backdrop" id="mSell">
+      <div class="modal wide">
+        <button class="close" data-close>✕</button>
+        <h3>🚘 Mashinani sotish</h3>
+        <p class="sub">E'lon ma'lumotlarini to'ldiring</p>
+        <form id="sellForm" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label>Marka *</label
+              ><input name="brand" placeholder="Chevrolet" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Model *</label><input name="model" placeholder="Gentra" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Ishlab chiqarilgan yili *</label
+              ><input type="number" name="year" placeholder="2020" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Yurgan masofasi (km) *</label
+              ><input type="number" name="km" placeholder="45000" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Narxi ($) *</label
+              ><input type="number" name="price" placeholder="12500" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Rangi *</label><input name="color" placeholder="Oq" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Yoqilg'i turi *</label>
+              <select name="fuel">
+                <option value="">Tanlang</option>
+                <option>Benzin</option>
+                <option>Gaz/Benzin</option>
+                <option>Dizel</option>
+                <option>Gibrid</option>
+                <option>Elektr</option>
+              </select>
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Uzatmalar qutisi *</label>
+              <select name="gear">
+                <option value="">Tanlang</option>
+                <option>Avtomat</option>
+                <option>Mexanika</option>
+              </select>
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Shahar *</label
+              ><input name="city" placeholder="Toshkent" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Telefon raqam *</label
+              ><input name="phone" placeholder="+998 90 123 45 67" />
+              <div class="msg"></div>
+            </div>
+            <div class="field full">
+              <label>Tavsif</label
+              ><textarea
+                name="desc"
+                rows="3"
+                placeholder="Mashina holati, qo'shimcha ma'lumotlar..."
+              ></textarea>
+            </div>
+            <div class="field full">
+              <label>Rasm havolasi (URL)</label
+              ><input name="imgUrl" placeholder="https://..." />
+              <div class="msg"></div>
+            </div>
+            <div class="field full">
+              <label>yoki rasm yuklash</label
+              ><input type="file" name="imgFile" accept="image/*" />
+              <img class="preview" id="sellPreview" alt="Oldindan ko'rish" />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            style="margin-top: 16px"
+          >
+            ✅ E'lonni joylash
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============ MODAL: KIRISH / RO'YXATDAN O'TISH ============ -->
+    <div class="backdrop" id="mAuth">
+      <div class="modal">
+        <button class="close" data-close>✕</button>
+        <h3>👋 Xush kelibsiz</h3>
+        <div class="tabs">
+          <button class="active" data-tab="login">Kirish</button>
+          <button data-tab="register">Ro'yxatdan o'tish</button>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="field" style="margin-bottom: 12px">
+            <label>Email</label
+            ><input name="email" type="email" placeholder="nom@mail.com" />
+            <div class="msg"></div>
+          </div>
+          <div class="field" style="margin-bottom: 14px">
+            <label>Parol</label>
+            <div class="pw-wrap">
+              <input
+                name="password"
+                type="password"
+                placeholder="••••••"
+              /><button type="button" class="togglePw">Ko'rsatish</button>
+            </div>
+            <div class="msg"></div>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">
+            Kirish
+          </button>
+        </form>
+
+        <form id="regForm" novalidate style="display: none">
+          <div class="form-grid">
+            <div class="field full">
+              <label>Ism *</label><input name="name" placeholder="Ismingiz" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Email *</label
+              ><input name="email" type="email" placeholder="nom@mail.com" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Telefon *</label
+              ><input name="phone" placeholder="+998 90 123 45 67" />
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Parol *</label>
+              <div class="pw-wrap">
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Kamida 6 belgi"
+                /><button type="button" class="togglePw">Ko'rsatish</button>
+              </div>
+              <div class="msg"></div>
+            </div>
+            <div class="field">
+              <label>Parolni takrorlang *</label
+              ><input
+                name="password2"
+                type="password"
+                placeholder="Takrorlang"
+              />
+              <div class="msg"></div>
+            </div>
+            <div class="field full">
+              <label class="check"
+                ><input type="checkbox" name="terms" />
+                <span>Foydalanish shartlariga roziman</span></label
+              >
+              <div class="msg"></div>
+            </div>
+          </div>
+          <button
+            class="btn btn-primary btn-block"
+            type="submit"
+            style="margin-top: 14px"
+          >
+            Ro'yxatdan o'tish
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div id="toasts"></div>
+
+    <script>
+      /* =====================================================
+   AVTOBOZOR — asosiy JavaScript
+   ===================================================== */
+
+      /* ---------- Yordamchi funksiyalar ---------- */
+      const $ = (s, r = document) => r.querySelector(s);
+      const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+      const store = {
+        get(k, d) {
+          try {
+            const v = localStorage.getItem(k);
+            return v ? JSON.parse(v) : d;
+          } catch {
+            return d;
+          }
+        },
+        set(k, v) {
+          try {
+            localStorage.setItem(k, JSON.stringify(v));
+            return true;
+          } catch {
+            return false;
+          }
+        },
+      };
+      // Narxni "$ 12 500" ko'rinishida chiqarish
+      const money = (n) =>
+        "$ " +
+        Math.round(n)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      const num = (n) =>
+        Math.round(n)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      // XSS dan himoya: foydalanuvchi matnini xavfsiz qilish
+      const esc = (s) =>
+        String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      // Rasm yuklanmasa — o'rniga SVG
+      const fallbackImg = (name) =>
+        "data:image/svg+xml;utf8," +
+        encodeURIComponent(
+          `<svg xmlns='http://www.w3.org/2000/svg' width='640' height='400'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#2f6bff'/><stop offset='1' stop-color='#6a3dff'/></linearGradient></defs><rect width='640' height='400' fill='url(#g)'/><text x='320' y='190' font-size='80' text-anchor='middle'>🚗</text><text x='320' y='260' font-size='28' fill='white' text-anchor='middle' font-family='Arial'>${String(name).replace(/[<>&']/g, "")}</text></svg>`,
+        );
+
+      // Mashina rasmi (SVG) — mashina rangi va turiga qarab avtomatik chiziladi, internet shart emas
+      const COLORS = {
+        oq: "#f2f4f8",
+        qora: "#1c1e26",
+        kumush: "#c2c7d1",
+        kulrang: "#7a8190",
+        qizil: "#d3283b",
+        "ko'k": "#2a5fd6",
+        "ko‘k": "#2a5fd6",
+        yashil: "#1f9d55",
+        sariq: "#f2c230",
+        jigarrang: "#7a4a2b",
+        "to'q sariq": "#f08a1c",
+      };
+      function carArt(c) {
+        const name = `${c.brand} ${c.model}`.replace(/[<>&'"]/g, "");
+        const body = COLORS[String(c.color).toLowerCase()] || "#3d7bd9";
+        const suv = ["Tracker", "Sportage", "Tucson"].includes(c.model);
+        const shape = suv
+          ? `<path d="M105 275 L105 230 Q105 212 125 208 L205 198 L240 150 Q246 142 260 142 L430 142 Q445 142 452 152 L478 198 L525 208 Q545 214 545 235 L545 275 Z" fill="${body}"/>
+       <path d="M254 160 L430 160 L458 198 L222 198 Z" fill="#cfe6f7"/><path d="M340 160 L340 198" stroke="${body}" stroke-width="7"/>`
+          : `<path d="M110 275 L110 235 Q110 220 130 216 L215 205 L255 165 Q262 158 275 158 L395 158 Q410 158 418 166 L455 205 L520 214 Q540 218 540 235 L540 275 Z" fill="${body}"/>
+       <path d="M264 171 L398 171 L432 203 L228 203 Z" fill="#cfe6f7"/><path d="M332 171 L332 203" stroke="${body}" stroke-width="7"/>`;
+        const wr = suv ? 43 : 40;
+        const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 400' width='640' height='400'>
+  <defs><linearGradient id='s' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#7db8f5'/><stop offset='1' stop-color='#e6f2ff'/></linearGradient></defs>
+  <rect width='640' height='400' fill='url(#s)'/><circle cx='540' cy='70' r='34' fill='#fff6c9' opacity='.9'/>
+  <rect y='290' width='640' height='110' fill='#3a3f4d'/><rect y='286' width='640' height='6' fill='#555b6b'/>
+  <g fill='#fff' opacity='.55'><rect x='40' y='345' width='70' height='6'/><rect x='200' y='345' width='70' height='6'/><rect x='360' y='345' width='70' height='6'/><rect x='520' y='345' width='70' height='6'/></g>
+  <ellipse cx='325' cy='292' rx='235' ry='14' fill='#000' opacity='.28'/>
+  ${shape}
+  <path d="M130 236 L520 236" stroke="#000" stroke-opacity='.12' stroke-width='3'/>
+  <rect x='520' y='222' width='20' height='11' rx='4' fill='#ffe9a0'/><rect x='110' y='224' width='14' height='11' rx='3' fill='#e0314b'/>
+  <g><circle cx='190' cy='274' r='${wr}' fill='#14161c'/><circle cx='190' cy='274' r='21' fill='#b9bfcc'/><circle cx='190' cy='274' r='8' fill='#14161c'/>
+  <circle cx='470' cy='274' r='${wr}' fill='#14161c'/><circle cx='470' cy='274' r='21' fill='#b9bfcc'/><circle cx='470' cy='274' r='8' fill='#14161c'/></g>
+  <text x='320' y='385' font-size='26' font-weight='700' fill='#fff' text-anchor='middle' font-family='Arial,sans-serif'>${name}</text></svg>`;
+        return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+      }
+
+      function toast(text, type = "") {
+        const t = document.createElement("div");
+        t.className = "toast " + type;
+        t.textContent = text;
+        $("#toasts").appendChild(t);
+        setTimeout(() => t.remove(), 3200);
+      }
+
+      /* ---------- Boshlang'ich mashinalar ---------- */
+      const U = (id) =>
+        `https://images.unsplash.com/${id}?auto=format&fit=crop&w=800&q=70`;
+      // Haqiqiy rasm manbalari: avval images/<slug>.jpg (lokal papka), keyin (bo'lsa) onlayn havola, oxirida chizilgan SVG
+      const REMOTE = {
+        "kia-k5":
+          "https://commons.wikimedia.org/wiki/Special:FilePath/2021_Kia_K5_GT-Line_in_Glacial_White_Pearl%2C_front_left.jpg?width=800",
+        "chevrolet-onix":
+          "https://commons.wikimedia.org/wiki/Special:FilePath/2022_Chevrolet_Onix_Turbo_LTZ_(Chile)_front_view_(cropped).jpg?width=800",
+      };
+      const firstSrc = (c) => (c.imgs && c.imgs[0]) || c.img;
+      function imgFail(el) {
+        // rasm yuklanmasa — keyingi manbaga o'tadi
+        const c = allCars().find((x) => String(x.id) === el.dataset.cid);
+        if (!c) return;
+        const srcs = [...(c.imgs || []), c.img];
+        const n = +el.dataset.n + 1;
+        if (n < srcs.length) {
+          el.dataset.n = n;
+          el.src = srcs[n];
+        } else {
+          el.onerror = null;
+          el.src = fallbackImg(c.brand + " " + c.model);
+        }
+      }
+      const SEED = [
+        {
+          id: 1,
+          brand: "Chevrolet",
+          model: "Gentra",
+          year: 2022,
+          km: 28000,
+          price: 11500,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Oq",
+          city: "Toshkent",
+          engine: "1.5 L",
+          power: "106 ot kuchi",
+          condition: "Zo'r",
+          phone: "+998 90 111 22 33",
+          desc: "Bitta egasi, to'liq servis tarixi bor. Salon toza, bo'yoq asl holatda.",
+          img: U("photo-1552519507-da3b142c6e3d"),
+        },
+        {
+          id: 2,
+          brand: "Chevrolet",
+          model: "Cobalt",
+          year: 2021,
+          km: 41000,
+          price: 10200,
+          fuel: "Gaz/Benzin",
+          gear: "Mexanika",
+          color: "Kumush",
+          city: "Samarqand",
+          engine: "1.5 L",
+          power: "106 ot kuchi",
+          condition: "Yaxshi",
+          phone: "+998 91 222 33 44",
+          desc: "Gaz balloni yangi, har kuni ishlatishga qulay va tejamkor.",
+          img: U("photo-1494976388531-d1058494cdd8"),
+        },
+        {
+          id: 3,
+          brand: "Chevrolet",
+          model: "Malibu 2",
+          year: 2022,
+          km: 22000,
+          price: 24500,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Qora",
+          city: "Toshkent",
+          engine: "2.0 L Turbo",
+          power: "238 ot kuchi",
+          condition: "Ajoyib",
+          phone: "+998 93 333 44 55",
+          desc: "To'liq komplektatsiya, panorama tom, teri salon.",
+          img: U("photo-1533473359331-0135ef1b58bf"),
+        },
+        {
+          id: 4,
+          brand: "Chevrolet",
+          model: "Tracker",
+          year: 2023,
+          km: 12000,
+          price: 21800,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Qizil",
+          city: "Buxoro",
+          engine: "1.2 L Turbo",
+          power: "133 ot kuchi",
+          condition: "Deyarli yangi",
+          phone: "+998 94 444 55 66",
+          desc: "Kafolat davom etmoqda. Kam yurgan, shahar va yo'l uchun zo'r krossover.",
+          img: U("photo-1549317661-bd32c8ce0db2"),
+        },
+        {
+          id: 5,
+          brand: "Chevrolet",
+          model: "Onix",
+          year: 2023,
+          km: 9000,
+          price: 15900,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Oq",
+          city: "Andijon",
+          engine: "1.0 L Turbo",
+          power: "117 ot kuchi",
+          condition: "Deyarli yangi",
+          phone: "+998 95 555 66 77",
+          desc: "Yangi avlod sedan, tejamkor va zamonaviy multimedia tizimi bilan.",
+          img: U("photo-1492144534655-ae79c964c9d7"),
+        },
+        {
+          id: 6,
+          brand: "Kia",
+          model: "K5",
+          year: 2021,
+          km: 35000,
+          price: 26500,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Kulrang",
+          city: "Toshkent",
+          engine: "2.0 L",
+          power: "150 ot kuchi",
+          condition: "Zo'r",
+          phone: "+998 90 666 77 88",
+          desc: "Sport dizayn, LED optika, orqa kamera va isitiladigan o'rindiqlar.",
+          img: U("photo-1583121274602-3e2820c69888"),
+        },
+        {
+          id: 7,
+          brand: "Kia",
+          model: "Sportage",
+          year: 2022,
+          km: 30000,
+          price: 28900,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Qora",
+          city: "Namangan",
+          engine: "2.0 L",
+          power: "150 ot kuchi",
+          condition: "Yaxshi",
+          phone: "+998 97 777 88 99",
+          desc: "Keng salon, to'liq privod, oilaviy foydalanish uchun ideal.",
+          img: U("photo-1606664515524-ed2f786a0bd6"),
+        },
+        {
+          id: 8,
+          brand: "Hyundai",
+          model: "Sonata",
+          year: 2020,
+          km: 52000,
+          price: 22400,
+          fuel: "Gaz/Benzin",
+          gear: "Avtomat",
+          color: "Oq",
+          city: "Farg'ona",
+          engine: "2.0 L",
+          power: "150 ot kuchi",
+          condition: "Yaxshi",
+          phone: "+998 98 888 99 00",
+          desc: "Gaz uskunasi o'rnatilgan, salon yaxshi saqlangan, hujjatlar tayyor.",
+          img: U("photo-1542362567-b07e54358753"),
+        },
+        {
+          id: 9,
+          brand: "Hyundai",
+          model: "Tucson",
+          year: 2022,
+          km: 24000,
+          price: 31500,
+          fuel: "Dizel",
+          gear: "Avtomat",
+          color: "Ko'k",
+          city: "Toshkent",
+          engine: "2.0 L",
+          power: "185 ot kuchi",
+          condition: "Ajoyib",
+          phone: "+998 90 101 20 30",
+          desc: "Dizel dvigatel, juda tejamkor. Rasmiy diler xizmatida.",
+          img: U("photo-1555215695-3004980ad54e"),
+        },
+        {
+          id: 10,
+          brand: "Toyota",
+          model: "Camry",
+          year: 2021,
+          km: 38000,
+          price: 33800,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Qora",
+          city: "Toshkent",
+          engine: "2.5 L",
+          power: "181 ot kuchi",
+          condition: "Ajoyib",
+          phone: "+998 91 202 30 40",
+          desc: "Camry XSE, sport paket, original probeg. Ishonchli va qulay.",
+          img: U("photo-1503376780353-7e6692767b70"),
+        },
+        {
+          id: 11,
+          brand: "Toyota",
+          model: "Corolla",
+          year: 2020,
+          km: 60000,
+          price: 18700,
+          fuel: "Gibrid",
+          gear: "Avtomat",
+          color: "Kumush",
+          city: "Navoiy",
+          engine: "1.8 L Hybrid",
+          power: "122 ot kuchi",
+          condition: "Yaxshi",
+          phone: "+998 93 303 40 50",
+          desc: "Gibrid tizim, 100 km ga atigi 4 litr yoqilg'i ketadi.",
+          img: U("photo-1580273916550-e323be2ae537"),
+        },
+        {
+          id: 12,
+          brand: "BMW",
+          model: "5-seriya",
+          year: 2019,
+          km: 74000,
+          price: 38500,
+          fuel: "Dizel",
+          gear: "Avtomat",
+          color: "Qora",
+          city: "Toshkent",
+          engine: "2.0 L",
+          power: "190 ot kuchi",
+          condition: "Yaxshi",
+          phone: "+998 94 404 50 60",
+          desc: "520d, M-paket, to'liq servis. Premium sinf qulayligi.",
+          img: U("photo-1555215695-3004980ad54e"),
+        },
+        {
+          id: 13,
+          brand: "Mercedes-Benz",
+          model: "E-class",
+          year: 2020,
+          km: 58000,
+          price: 45900,
+          fuel: "Benzin",
+          gear: "Avtomat",
+          color: "Kulrang",
+          city: "Toshkent",
+          engine: "2.0 L Turbo",
+          power: "258 ot kuchi",
+          condition: "Ajoyib",
+          phone: "+998 95 505 60 70",
+          desc: "E300, AMG paketi, havo pardasi va keng ko'rinadigan displey.",
+          img: U("photo-1619767886558-efdc259cde1a"),
+        },
+        {
+          id: 14,
+          brand: "Tesla",
+          model: "Model 3",
+          year: 2022,
+          km: 18000,
+          price: 36900,
+          fuel: "Elektr",
+          gear: "Avtomat",
+          color: "Oq",
+          city: "Toshkent",
+          engine: "Elektr",
+          power: "283 ot kuchi",
+          condition: "Deyarli yangi",
+          phone: "+998 97 606 70 80",
+          desc: "Autopilot, 500+ km yurish zaxirasi, uy zaryadlovchisi bilan birga.",
+          img: U("photo-1560958089-b8a1929cea89"),
+        },
+      ].map((c, i) => {
+        const slug = `${c.brand}-${c.model}`
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "");
+        return {
+          ...c,
+          ts: i,
+          own: false,
+          slug,
+          imgs: [`images/${slug}.jpg`, ...(REMOTE[slug] ? [REMOTE[slug]] : [])],
+          img: carArt(c),
+        };
+      });
+
+      /* ---------- Holat ---------- */
+      let userCars = store.get("ab_cars", []);
+      let users = store.get("ab_users", []);
+      let session = store.get("ab_session", null); // { name, email }
+      let favs = store.get("ab_favs", []);
+      let onlyFav = false;
+      const allCars = () => [...userCars, ...SEED];
+
+      /* =====================================================
+   TUNGI / KUNDUZGI REJIM
+   ===================================================== */
+      function applyTheme(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        $("#themeBtn").textContent = t === "dark" ? "☀️" : "🌙";
+        store.set("ab_theme", t);
+      }
+      applyTheme(
+        store.get(
+          "ab_theme",
+          matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light",
+        ),
+      );
+      $("#themeBtn").onclick = () =>
+        applyTheme(
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark",
+        );
+
+      /* =====================================================
+   MODAL BOSHQARUVI
+   ===================================================== */
+      const openModal = (id) => {
+        $("#" + id).classList.add("open");
+        document.body.style.overflow = "hidden";
+      };
+      const closeModals = () => {
+        $$(".backdrop").forEach((b) => b.classList.remove("open"));
+        document.body.style.overflow = "";
+      };
+      $$(".backdrop").forEach((b) =>
+        b.addEventListener("mousedown", (e) => {
+          if (e.target === b) closeModals();
+        }),
+      ); // tashqariga bosish
+      $$("[data-close]").forEach((b) => (b.onclick = closeModals));
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModals();
+      }); // Esc
+
+      /* =====================================================
+   FILTR TO'LDIRISH
+   ===================================================== */
+      function fillFilters() {
+        const brands = [...new Set(allCars().map((c) => c.brand))].sort();
+        const cur = $("#fBrand").value;
+        $("#fBrand").innerHTML =
+          '<option value="">Barchasi</option>' +
+          brands.map((b) => `<option>${esc(b)}</option>`).join("");
+        $("#fBrand").value = brands.includes(cur) ? cur : "";
+        if ($("#fYear").options.length < 2) {
+          const y = new Date().getFullYear();
+          for (let i = y; i >= 2005; i--)
+            $("#fYear").insertAdjacentHTML(
+              "beforeend",
+              `<option>${i}</option>`,
+            );
+        }
+      }
+
+      /* =====================================================
+   KATALOGNI CHIZISH
+   ===================================================== */
+      function render() {
+        const q = $("#fSearch").value.trim().toLowerCase();
+        const brand = $("#fBrand").value,
+          fuel = $("#fFuel").value,
+          gear = $("#fGear").value;
+        const min = parseFloat($("#fMin").value),
+          max = parseFloat($("#fMax").value),
+          yr = parseInt($("#fYear").value);
+
+        let list = allCars().filter(
+          (c) =>
+            (!q || `${c.brand} ${c.model}`.toLowerCase().includes(q)) &&
+            (!brand || c.brand === brand) &&
+            (!fuel || c.fuel === fuel) &&
+            (!gear || c.gear === gear) &&
+            (isNaN(min) || c.price >= min) &&
+            (isNaN(max) || c.price <= max) &&
+            (isNaN(yr) || c.year >= yr) &&
+            (!onlyFav || favs.includes(c.id)),
+        );
+
+        const sorters = {
+          new: (a, b) => b.ts - a.ts,
+          priceAsc: (a, b) => a.price - b.price,
+          priceDesc: (a, b) => b.price - a.price,
+          yearDesc: (a, b) => b.year - a.year,
+          yearAsc: (a, b) => a.year - b.year,
+        };
+        list.sort(sorters[$("#fSort").value]);
+
+        $("#resCount").textContent = `Topildi: ${list.length} ta e'lon`;
+        $("#grid").innerHTML = list.length
+          ? list
+              .map(
+                (c, i) => `
+    <article class="card" style="animation-delay:${Math.min(i, 8) * 0.05}s">
+      <div class="card-img">
+        <img src="${esc(firstSrc(c))}" alt="${esc(c.brand + " " + c.model)}" loading="lazy" data-cid="${c.id}" data-n="0" onerror="imgFail(this)">
+        ${c.own ? '<span class="tag">Yangi e\'lon</span>' : ""}
+        <button class="fav ${favs.includes(c.id) ? "on" : ""}" data-fav="${c.id}" title="Sevimlilarga">${favs.includes(c.id) ? "❤️" : "🤍"}</button>
+      </div>
+      <div class="card-body">
+        <div class="card-title">${esc(c.brand)} ${esc(c.model)}</div>
+        <div class="specs">
+          <span>📅 ${c.year} yil</span><span>🛣️ ${num(c.km)} km</span>
+          <span>⛽ ${esc(c.fuel)}</span><span>⚙️ ${esc(c.gear)}</span>
+          <span>🎨 ${esc(c.color)}</span><span>📍 ${esc(c.city)}</span>
+        </div>
+        <div class="price">${money(c.price)}</div>
+        <div class="card-actions">
+          <button class="btn btn-outline" data-detail="${c.id}">Batafsil</button>
+          <button class="btn btn-primary" data-buy="${c.id}">Sotib olish</button>
+        </div>
+      </div>
+    </article>`,
+              )
+              .join("")
+          : `<div class="empty"><b>🔎</b>Hech narsa topilmadi</div>`;
+        updateFavBadge();
+      }
+
+      // Kartochka tugmalari (event delegation)
+      $("#grid").addEventListener("click", (e) => {
+        const f = e.target.closest("[data-fav]"),
+          d = e.target.closest("[data-detail]"),
+          b = e.target.closest("[data-buy]");
+        if (f) toggleFav(+f.dataset.fav);
+        if (d) showDetail(+d.dataset.detail);
+        if (b) showBuy(+b.dataset.buy);
+      });
+
+      ["fSearch", "fMin", "fMax"].forEach((id) =>
+        $("#" + id).addEventListener("input", render),
+      );
+      ["fBrand", "fYear", "fFuel", "fGear", "fSort"].forEach((id) =>
+        $("#" + id).addEventListener("change", render),
+      );
+      $("#fReset").onclick = () => {
+        $$(".filters input").forEach((i) => (i.value = ""));
+        $$(".filters select").forEach((s) => (s.value = ""));
+        render();
+      };
+      $("#onlyFav").onclick = (e) => {
+        onlyFav = !onlyFav;
+        e.currentTarget.classList.toggle("active", onlyFav);
+        render();
+      };
+      $("#favBtn").onclick = () => {
+        onlyFav = true;
+        $("#onlyFav").classList.add("active");
+        render();
+        $("#cars").scrollIntoView();
+      };
+
+      // Hero qidiruv
+      function heroSearch() {
+        $("#fSearch").value = $("#heroSearch").value;
+        render();
+        $("#cars").scrollIntoView();
+      }
+      $("#heroSearchBtn").onclick = heroSearch;
+      $("#heroSearch").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") heroSearch();
+      });
+
+      /* =====================================================
+   SEVIMLILAR
+   ===================================================== */
+      function toggleFav(id) {
+        favs = favs.includes(id) ? favs.filter((x) => x !== id) : [...favs, id];
+        store.set("ab_favs", favs);
+        toast(
+          favs.includes(id)
+            ? "❤️ Sevimlilarga qo'shildi"
+            : "Sevimlilardan olib tashlandi",
+        );
+        render();
+      }
+      function updateFavBadge() {
+        $("#favCount").textContent = favs.length;
+      }
+
+      /* =====================================================
+   BATAFSIL MODAL
+   ===================================================== */
+      function showDetail(id) {
+        const c = allCars().find((x) => x.id === id);
+        if (!c) return;
+        $("#detailBody").innerHTML = `
+    <div class="detail-img"><img src="${esc(firstSrc(c))}" alt="" data-cid="${c.id}" data-n="0" onerror="imgFail(this)"></div>
+    <h3>${esc(c.brand)} ${esc(c.model)}, ${c.year}</h3>
+    <div class="price" style="margin:4px 0 8px">${money(c.price)}</div>
+    <div class="detail-table">
+      <div><small>Yili</small>${c.year}</div><div><small>Yurgan masofa</small>${num(c.km)} km</div>
+      <div><small>Dvigatel hajmi</small>${esc(c.engine || "—")}</div><div><small>Quvvat</small>${esc(c.power || "—")}</div>
+      <div><small>Yoqilg'i</small>${esc(c.fuel)}</div><div><small>Uzatmalar qutisi</small>${esc(c.gear)}</div>
+      <div><small>Rangi</small>${esc(c.color)}</div><div><small>Holati</small>${esc(c.condition || "Yaxshi")}</div>
+      <div><small>Shahar</small>${esc(c.city)}</div><div><small>Sotuvchi telefoni</small><a href="tel:${esc(c.phone)}"><b>${esc(c.phone)}</b></a></div>
+    </div>
+    <p style="color:var(--muted);margin-bottom:14px">${esc(c.desc || "Tavsif kiritilmagan.")}</p>
+    <button class="btn btn-primary btn-block" id="detailBuy">🛒 Sotib olish</button>`;
+        $("#detailBuy").onclick = () => showBuy(id);
+        openModal("mDetail");
+      }
+
+      /* =====================================================
+   SOTIB OLISH MODAL
+   ===================================================== */
+      function showBuy(id) {
+        const c = allCars().find((x) => x.id === id);
+        if (!c) return;
+        closeModals();
+        $("#buyBody").innerHTML = `
+    <h3>🛒 Sotib olish arizasi</h3><p class="sub">Ma'lumotlaringizni qoldiring, sotuvchi siz bilan bog'lanadi</p>
+    <div class="summary"><img src="${esc(firstSrc(c))}" alt="" data-cid="${c.id}" data-n="0" onerror="imgFail(this)">
+      <div><b>${esc(c.brand)} ${esc(c.model)}, ${c.year}</b><div class="price" style="font-size:1.3rem">${money(c.price)}</div></div></div>
+    <form id="buyForm" novalidate><div class="form-grid">
+      <div class="field"><label>Ism *</label><input name="name" value="${esc(session?.name || "")}"><div class="msg"></div></div>
+      <div class="field"><label>Telefon *</label><input name="phone" placeholder="+998 90 123 45 67"><div class="msg"></div></div>
+      <div class="field full"><label>To'lov usuli *</label>
+        <select name="pay"><option value="">Tanlang</option><option>Naqd pul</option><option>Bo'lib to'lash</option><option>Bank o'tkazmasi</option></select><div class="msg"></div></div>
+      <div class="field full"><label>Izoh</label><textarea name="note" rows="2" placeholder="Qo'shimcha izoh..."></textarea></div>
+    </div><button class="btn btn-primary btn-block" style="margin-top:14px">Tasdiqlash</button></form>`;
+        $("#buyForm").onsubmit = (e) => {
+          e.preventDefault();
+          const f = e.target;
+          clearErrors(f);
+          let ok = true;
+          if (f.name.value.trim().length < 2)
+            ok = setErr(f.name, "Ismni kiriting");
+          if (!validPhone(f.phone.value))
+            ok = setErr(f.phone, "Telefon raqam noto'g'ri");
+          if (!f.pay.value) ok = setErr(f.pay, "To'lov usulini tanlang");
+          if (!ok) return;
+          // Arizani saqlash
+          const orders = store.get("ab_orders", []);
+          orders.push({
+            carId: id,
+            name: f.name.value.trim(),
+            phone: f.phone.value.trim(),
+            pay: f.pay.value,
+            note: f.note.value.trim(),
+            date: Date.now(),
+          });
+          store.set("ab_orders", orders);
+          $("#buyBody").innerHTML =
+            `<div class="success"><div class="ok">✅</div><h3>Arizangiz qabul qilindi!</h3>
+      <p class="sub">Tez orada sotuvchi siz bilan bog'lanadi.</p><button class="btn btn-primary" data-close2>Yopish</button></div>`;
+          $("[data-close2]").onclick = closeModals;
+        };
+        openModal("mBuy");
+      }
+
+      /* =====================================================
+   FORMA VALIDATSIYA YORDAMCHILARI
+   ===================================================== */
+      function setErr(input, text) {
+        const field = input.closest(".field");
+        field.classList.add("err");
+        const m = field.querySelector(".msg");
+        if (m) m.textContent = text;
+        return false;
+      }
+      function clearErrors(form) {
+        $$(".field.err", form).forEach((f) => f.classList.remove("err"));
+      }
+      const validPhone = (p) => p.replace(/\D/g, "").length >= 9;
+      const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+      /* =====================================================
+   MASHINA SOTISH
+   ===================================================== */
+      function openSell() {
+        if (!session) {
+          toast("Mashinani sotish uchun avval tizimga kiring", "bad");
+          openAuth("login");
+          return;
+        }
+        closeModals();
+        openModal("mSell");
+      }
+      ["navSell", "heroSell", "sellBtn2"].forEach((id) =>
+        $("#" + id).addEventListener("click", (e) => {
+          e.preventDefault();
+          openSell();
+        }),
+      );
+      $("#navBuy").addEventListener("click", () =>
+        $("#navLinks").classList.remove("open"),
+      );
+
+      let uploadedImg = "";
+      $("#sellForm").imgFile.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 1.5 * 1024 * 1024) {
+          toast("Rasm hajmi 1.5 MB dan oshmasin", "bad");
+          e.target.value = "";
+          return;
+        }
+        const r = new FileReader();
+        r.onload = () => {
+          uploadedImg = r.result;
+          const p = $("#sellPreview");
+          p.src = uploadedImg;
+          p.style.display = "block";
+        };
+        r.readAsDataURL(file);
+      });
+
+      $("#sellForm").onsubmit = (e) => {
+        e.preventDefault();
+        const f = e.target;
+        clearErrors(f);
+        let ok = true;
+        const year = +f.year.value,
+          now = new Date().getFullYear();
+        if (f.brand.value.trim().length < 2)
+          ok = setErr(f.brand, "Markani kiriting");
+        if (!f.model.value.trim()) ok = setErr(f.model, "Modelni kiriting");
+        if (!year || year < 1980 || year > now + 1)
+          ok = setErr(f.year, `Yil 1980 – ${now + 1} oralig'ida bo'lsin`);
+        if (f.km.value === "" || +f.km.value < 0)
+          ok = setErr(f.km, "Yurgan masofani kiriting");
+        if (!(+f.price.value > 0)) ok = setErr(f.price, "Narxni kiriting");
+        if (!f.color.value.trim()) ok = setErr(f.color, "Rangni kiriting");
+        if (!f.fuel.value) ok = setErr(f.fuel, "Yoqilg'i turini tanlang");
+        if (!f.gear.value) ok = setErr(f.gear, "Qutini tanlang");
+        if (!f.city.value.trim()) ok = setErr(f.city, "Shaharni kiriting");
+        if (!validPhone(f.phone.value))
+          ok = setErr(f.phone, "Telefon raqam noto'g'ri");
+        const url = f.imgUrl.value.trim();
+        if (url && !/^https?:\/\/.+/i.test(url))
+          ok = setErr(f.imgUrl, "To'g'ri havola kiriting (https://...)");
+        if (!ok) return;
+
+        const brand = f.brand.value.trim(),
+          model = f.model.value.trim();
+        const car = {
+          id: Date.now(),
+          ts: Date.now(),
+          own: true,
+          owner: session.email,
+          brand,
+          model,
+          year,
+          km: +f.km.value,
+          price: +f.price.value,
+          fuel: f.fuel.value,
+          gear: f.gear.value,
+          color: f.color.value.trim(),
+          city: f.city.value.trim(),
+          phone: f.phone.value.trim(),
+          engine: "—",
+          power: "—",
+          condition: "Sotuvchi ko'rsatgan",
+          desc: f.desc.value.trim(),
+          img: uploadedImg || url,
+        };
+        if (!car.img) car.img = carArt(car); // rasm berilmasa — rangiga mos rasm chiziladi
+        userCars.unshift(car);
+        if (!store.set("ab_cars", userCars)) {
+          // xotira to'lib qolsa
+          userCars.shift();
+          toast("Xotira to'lgan. Kichikroq rasm tanlang.", "bad");
+          return;
+        }
+        f.reset();
+        uploadedImg = "";
+        $("#sellPreview").style.display = "none";
+        closeModals();
+        fillFilters();
+        $("#fSort").value = "new";
+        render();
+        toast("✅ E'lon muvaffaqiyatli joylandi!", "ok");
+        $("#cars").scrollIntoView();
+      };
+
+      /* =====================================================
+   KIRISH / RO'YXATDAN O'TISH
+   ===================================================== */
+      function openAuth(tab = "login") {
+        closeModals();
+        switchTab(tab);
+        openModal("mAuth");
+      }
+      function switchTab(tab) {
+        $$(".tabs button").forEach((b) =>
+          b.classList.toggle("active", b.dataset.tab === tab),
+        );
+        $("#loginForm").style.display = tab === "login" ? "" : "none";
+        $("#regForm").style.display = tab === "register" ? "" : "none";
+      }
+      $$(".tabs button").forEach(
+        (b) => (b.onclick = () => switchTab(b.dataset.tab)),
+      );
+      $$(".togglePw").forEach(
+        (b) =>
+          (b.onclick = () => {
+            const inp = b.parentElement.querySelector("input");
+            const show = inp.type === "password";
+            inp.type = show ? "text" : "password";
+            b.textContent = show ? "Yashirish" : "Ko'rsatish";
+          }),
+      );
+
+      // Eslatma: bu demo — parol brauzer xotirasida saqlanadi. Haqiqiy loyihada server va xesh ishlatiladi.
+      $("#regForm").onsubmit = (e) => {
+        e.preventDefault();
+        const f = e.target;
+        clearErrors(f);
+        let ok = true;
+        if (f.name.value.trim().length < 2)
+          ok = setErr(f.name, "Ismni kiriting");
+        if (!validEmail(f.email.value.trim()))
+          ok = setErr(f.email, "Email noto'g'ri");
+        if (!validPhone(f.phone.value))
+          ok = setErr(f.phone, "Telefon noto'g'ri");
+        if (f.password.value.length < 6)
+          ok = setErr(f.password, "Parol kamida 6 belgi");
+        if (f.password2.value !== f.password.value)
+          ok = setErr(f.password2, "Parollar mos emas");
+        if (!f.terms.checked) ok = setErr(f.terms, "Shartlarga rozilik kerak");
+        if (!ok) return;
+        const email = f.email.value.trim().toLowerCase();
+        if (users.some((u) => u.email === email))
+          return void setErr(f.email, "Bu email ro'yxatdan o'tgan");
+        users.push({
+          name: f.name.value.trim(),
+          email,
+          phone: f.phone.value.trim(),
+          password: f.password.value,
+        });
+        store.set("ab_users", users);
+        login({ name: f.name.value.trim(), email });
+        f.reset();
+        toast("🎉 Ro'yxatdan o'tdingiz!", "ok");
+      };
+
+      $("#loginForm").onsubmit = (e) => {
+        e.preventDefault();
+        const f = e.target;
+        clearErrors(f);
+        let ok = true;
+        if (!validEmail(f.email.value.trim()))
+          ok = setErr(f.email, "Email noto'g'ri");
+        if (!f.password.value) ok = setErr(f.password, "Parolni kiriting");
+        if (!ok) return;
+        const u = users.find(
+          (u) =>
+            u.email === f.email.value.trim().toLowerCase() &&
+            u.password === f.password.value,
+        );
+        if (!u) return void setErr(f.password, "Email yoki parol noto'g'ri");
+        login({ name: u.name, email: u.email });
+        f.reset();
+        toast("👋 Xush kelibsiz, " + u.name + "!", "ok");
+      };
+
+      function login(s) {
+        session = s;
+        store.set("ab_session", s);
+        closeModals();
+        renderAuth();
+      }
+      function logout() {
+        session = null;
+        store.set("ab_session", null);
+        renderAuth();
+        toast("Tizimdan chiqdingiz");
+      }
+
+      function renderAuth() {
+        const a = $("#authArea");
+        if (session) {
+          a.innerHTML = `<div class="user-box"><div class="avatar">${esc(session.name[0].toUpperCase())}</div>
+      <span class="user-name">${esc(session.name)}</span><button class="btn btn-outline" id="logoutBtn">Chiqish</button></div>`;
+          $("#logoutBtn").onclick = logout;
+        } else {
+          a.innerHTML = `<button class="btn btn-primary" id="loginBtn">Kirish / Ro'yxatdan o'tish</button>`;
+          $("#loginBtn").onclick = () => openAuth("login");
+        }
+      }
+
+      /* =====================================================
+   NAVBAR, ANIMATSIYA, STATISTIKA
+   ===================================================== */
+      $("#burger").onclick = () => $("#navLinks").classList.toggle("open");
+      $$("#navLinks a").forEach((a) =>
+        a.addEventListener("click", () =>
+          $("#navLinks").classList.remove("open"),
+        ),
+      );
+
+      // Sahifa bo'limiga qarab menyuni belgilash
+      const sections = ["home", "cars", "about"].map((id) => $("#" + id));
+      addEventListener("scroll", () => {
+        const y = scrollY + 120;
+        let cur = "home";
+        sections.forEach((s) => {
+          if (s.offsetTop <= y) cur = s.id;
+        });
+        $$("#navLinks a").forEach((a) =>
+          a.classList.toggle("active", a.getAttribute("href") === "#" + cur),
+        );
+      });
+
+      // Statistika sanash animatsiyasi
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((en) => {
+            if (!en.isIntersecting) return;
+            const el = en.target,
+              to = +el.dataset.to;
+            let n = 0;
+            const step = Math.max(1, Math.ceil(to / 60));
+            const t = setInterval(() => {
+              n = Math.min(to, n + step);
+              el.textContent = n;
+              if (n >= to) clearInterval(t);
+            }, 25);
+            io.unobserve(el);
+          }),
+        { threshold: 0.5 },
+      );
+      $$("[data-to]").forEach((el) => io.observe(el));
+
+      /* ---------- Ishga tushirish ---------- */
+      $("#year").textContent = new Date().getFullYear();
+      fillFilters();
+      renderAuth();
+      render();
+    </script>
+  </body>
+</html>
